@@ -72,7 +72,11 @@ class GardenaSmartSystemConfigFlow(ConfigFlow, domain=DOMAIN):
                     else:
                         return self.async_create_entry(
                             title="Gardena Smart System",
-                            data=user_input,
+                            data={
+                                **user_input,
+                                "token": auth.token,
+                                "token_expiry": auth._token_expiry,
+                            },
                         )
 
         return self.async_show_form(

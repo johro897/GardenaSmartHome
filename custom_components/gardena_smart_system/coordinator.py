@@ -128,8 +128,17 @@ class GardenaDataCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         )
         self._client = GardenaClient(self._auth, self._session)
 
-        # Authenticate
-        await self._auth.authenticate()
+        # Restore token from config entry if available (avoids simultaneous login
+        # error when coordinator authenticates right after config flow already did)
+        if "token" in self._entry.data and "token_expiry" in self._entry.data:
+            self._auth.restore_token(
+                self._entry.data["token"],
+                self._entry.data["token_expiry"],
+            )
+
+        # Authenticate only if no valid token was restored
+        if not self._auth.is_token_valid:
+            await self._auth.authenticate()
 
         # Fetch locations
         self._locations = await self._client.get_locations()

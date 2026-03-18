@@ -94,6 +94,11 @@ class GardenaAuth:
         except aiohttp.ClientError as err:
             raise GardenaAuthError(f"Connection error during auth: {err}") from err
 
+    def restore_token(self, token: str, expiry: float) -> None:
+        """Restore a previously acquired token (e.g. from config entry data)."""
+        self._token = token
+        self._token_expiry = expiry
+
     async def ensure_valid_token(self) -> str:
         """Ensure we have a valid token, refreshing if needed.
 
