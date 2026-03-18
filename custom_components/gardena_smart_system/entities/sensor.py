@@ -18,7 +18,6 @@ from homeassistant.components.sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     PERCENTAGE,
-    UnitOfIlluminance,
     UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant
@@ -63,7 +62,7 @@ SOIL_SENSOR_TYPES: list[GardenaSensorDescription] = [
         attribute="lightIntensity",
         name="Light Intensity",
         device_class=SensorDeviceClass.ILLUMINANCE,
-        native_unit=UnitOfIlluminance.LUX,
+        native_unit="lx",
     ),
 ]
 
