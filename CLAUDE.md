@@ -20,20 +20,25 @@ A HACS-compatible Home Assistant custom component for Gardena Smart System API v
 - WebSocket per location with auto-reconnect (exponential backoff)
 - Token refresh 5 minutes before expiry
 - SSL context created in executor thread (non-blocking)
+- **Token reuse:** config flow stores token + expiry in config entry data. Coordinator restores it via `auth.restore_token()` to avoid Husqvarna's simultaneous login rejection.
+- **UnitOfIlluminance** not available in all HA versions — use string `"lx"` directly.
 
 ## What's Done
 - Full integration: config flow, API layer (auth/client/websocket), coordinator, all entity platforms
 - API smoke test script (`tests/smoke_test_api.py`)
 - Fix: device attributes populated from COMMON service (not DEVICE)
-- CI: hassfest + pytest in `.github/workflows/validate.yaml`
+- Fix: simultaneous login error — token passed from config flow to coordinator
+- Fix: `UnitOfIlluminance` replaced with `"lx"` string for HA compatibility
+- CI: hassfest + pytest + hacs/action in `.github/workflows/validate.yaml`
 - README, translations (en/sv), hacs.json, manifest.json
+- MIT LICENSE in repo root
+- Published to HACS (exists in store as `CorSeptem/GardenaSmartHome`)
+- Latest release: **v1.0.3** (manifest.json version matches)
+- Default branch: `main`
 
-## What Remains for HACS Publication
-1. **Add MIT LICENSE file** to repo root (HACS requirement)
-2. **Add `hacs/action`** to CI workflow (`.github/workflows/validate.yaml`)
-3. **Merge to main** — create PR or merge directly
-3. **Create GitHub release** with tag (e.g. `v1.0.0`) — HACS requires at least one release
-4. **Test in HACS** — add as custom repository and verify install works
+## What Remains
+- Verify all entity platforms work with real devices
+- Monitor for further HA compatibility issues
 
 ## Development
 ```bash
@@ -41,5 +46,8 @@ pip install -r requirements_dev.txt
 pytest tests/ -v
 ```
 
-## Branch
-Working branch: `claude/gardena-smart-system-integration-FKXd3`
+## Husqvarna Developer Portal
+- Create app at developer.husqvarnagroup.net
+- Connect **Gardena Smart System API** under "Connected APIs"
+- **Application Key** = Client ID, **Application Secret** = Client Secret
+- Redirect URL: `http://localhost` (not used, integration uses Client Credentials flow)
