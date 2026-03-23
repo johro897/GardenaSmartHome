@@ -1,5 +1,5 @@
 {
-  "name": "Gardena Smart System",
+  "name": "Gardena Smart System v2",
   "content_in_root": false,
   "render_readme": true,
   "homeassistant": "2023.9.0"
