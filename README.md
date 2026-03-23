@@ -1,70 +1,67 @@
-# Gardena Smart System - Home Assistant Integration
+# Gardena Smart System — Home Assistant Integration
 
 A modern Home Assistant custom component for the Gardena Smart System API v2.
 
+[![HACS](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://hacs.xyz)
+[![HA Version](https://img.shields.io/badge/Home%20Assistant-2023.9%2B-blue.svg)](https://www.home-assistant.io)
+
 ## Features
 
-- **Lawn mower** (Sileno): mowing/docked/paused/error states + start, dock, pause controls
+- **Lawn mower** (Sileno): mowing / docked / paused / error + start, dock, pause
 - **Irrigation valves** (Irrigation Control, Water Control): open/close with duration
 - **Soil sensors**: temperature (°C), humidity (%), light intensity (lux)
 - **Binary sensors**: gateway connectivity, WebSocket connection status
 - **Real-time updates** via WebSocket with automatic reconnection
 - **Multi-location support**
 
-## Prerequisites
-
-1. Create an account at [Husqvarna Developer Portal](https://developer.husqvarnagroup.cloud/)
-2. Create an application and connect the **Gardena Smart System API**
-3. Note your **Application Key** (Client ID) and **Application Secret** (Client Secret)
-
 ## Installation
 
-### HACS (Recommended)
+### Via HACS (recommended)
 
 1. Open HACS in Home Assistant
-2. Go to **Integrations** → **⋮** (top right) → **Custom repositories**
-3. Add this repository URL with category **Integration**
+2. Go to **Integrations** → **⋮** → **Custom repositories**
+3. Add `https://github.com/johro897/GardenaSmartHome` — category: **Integration**
 4. Search for "Gardena Smart System" and install
 5. Restart Home Assistant
 
 ### Manual
 
-1. Copy the `custom_components/gardena_smart_system` folder to your `config/custom_components/` directory
-2. Restart Home Assistant
+Copy `custom_components/gardena_smart_system/` to your `/config/custom_components/` and restart.
+
+## Prerequisites
+
+1. Create an account at [developer.husqvarnagroup.cloud](https://developer.husqvarnagroup.cloud)
+2. Create an application and connect **Authentication API** + **GARDENA smart system API**
+3. Note your **Application Key** and **Application Secret**
 
 ## Configuration
 
-1. Go to **Settings** → **Devices & Services** → **Add Integration**
-2. Search for **Gardena Smart System**
-3. Enter your Application Key and Application Secret
-4. The integration will discover all locations and devices automatically
+Settings → Devices & Services → Add Integration → **Gardena Smart System**
 
-## Supported Devices
+## Supported devices
 
 | Device | HA Platform | States | Controls |
-|--------|------------|--------|----------|
+|---|---|---|---|
 | Sileno Mower | `lawn_mower` | mowing, docked, paused, error | start, dock, pause |
-| Irrigation Control | `valve` | open, closed | open (with duration), close |
-| Water Control | `valve` | open, closed | open (with duration), close |
-| Soil Sensor | `sensor` | temperature, humidity, light | — |
-| Gateway | `binary_sensor` | online/offline | — |
+| Irrigation Control | `valve` | open, closed | open (duration), close |
+| Water Control | `valve` | open, closed | open (duration), close |
+| Soil Sensor | `sensor` | temp, humidity, light | — |
+| Gateway | `binary_sensor` | online / offline | — |
 
 ## Architecture
 
-- **No external dependencies** — uses only `aiohttp` (built into HA)
-- **WebSocket** for real-time push updates with exponential backoff reconnection
-- **Proactive token refresh** — refreshes OAuth2 token 5 minutes before expiry
-- **Non-blocking SSL** — SSL context created in executor thread
-- **Proper cleanup** — all connections properly closed on unload
+- No external dependencies — uses only `aiohttp` (built into HA)
+- WebSocket push updates with exponential backoff reconnection (5s → 10s → 30s → 60s)
+- Proactive token refresh — 5 minutes before expiry
+- Non-blocking SSL context (executor thread)
+- Proper cleanup on unload
 
 ## Troubleshooting
 
-### WebSocket disconnects
-The integration automatically reconnects with exponential backoff (5s → 10s → 30s → 60s). Check the `binary_sensor` entities for connection status.
+**WebSocket disconnects** — automatic reconnect with backoff. Check the `binary_sensor` entities for live connection status.
 
-### Authentication errors
-Verify your credentials at the [Husqvarna Developer Portal](https://developer.husqvarnagroup.cloud/). Ensure the Gardena Smart System API is connected to your application.
+**Auth errors** — verify credentials at [developer.husqvarnagroup.cloud](https://developer.husqvarnagroup.cloud) and confirm the Gardena API is connected to your application.
 
 ## License
 
-MIT
+MIT — forked from [CorSeptem/GardenaSmartHome](https://github.com/CorSeptem/GardenaSmartHome)
