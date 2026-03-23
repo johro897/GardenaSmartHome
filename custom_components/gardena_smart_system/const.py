@@ -1,6 +1,6 @@
 """Constants for the Gardena Smart System integration."""
 
-DOMAIN = "gardena_smart_system"
+DOMAIN = "gardena_smart_system_v2"
 
 CONF_CLIENT_ID = "client_id"
 CONF_CLIENT_SECRET = "client_secret"
