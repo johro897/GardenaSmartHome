@@ -1,5 +1,5 @@
 {
-  "domain": "gardena_smart_system",
+  "domain": "gardena_smart_system_v2",
   "name": "Gardena Smart System v2",
   "version": "1.0.3",
   "codeowners": ["@johro897"],
